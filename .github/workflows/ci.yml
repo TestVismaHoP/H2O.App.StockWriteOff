@@ -1,0 +1,39 @@
+
+name: CI Pipeline
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: codebuild-Gamma_HoP-${{ github.run_id }}-${{ github.run_attempt }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: |
+          echo "Building application..."
+          sleep 10
+          echo "Build complete"
+
+  deploy-test:
+    needs: build
+    runs-on: codebuild-Gamma_HoP-${{ github.run_id }}-${{ github.run_attempt }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to Test
+        run: |
+          echo "Deploying to test environment..."
+          sleep 10
+          echo "Deploy complete"
+
+  ui-tests:
+    needs: deploy-test
+    runs-on: codebuild-Gamma_HoP-${{ github.run_id }}-${{ github.run_attempt }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run UI Tests
+        run: |
+          echo "Running UI tests..."
+          sleep 30
+          echo "UI tests complete"
